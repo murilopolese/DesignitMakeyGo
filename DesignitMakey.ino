@@ -8,42 +8,48 @@ CapacitiveSensor sensor2 = CapacitiveSensor( 16, 8 );
 CapacitiveSensor sensor3 = CapacitiveSensor( 14, 7 );
 // Blue pin
 CapacitiveSensor sensor4 = CapacitiveSensor( 15, 6 );
+
+boolean sensor1Active = false;
+boolean sensor2Active = false;
+boolean sensor3Active = false;
+boolean sensor4Active = false;
                               
 // Potentiometer - Threshold
-int tValue = 8000;
+int ACTIVATION_THRESHOLD = 8000;
+int RELEASE_THRESHOLD = 1000;
 
-void setup() {
+void setup() {      
   Serial.begin( 9600 );
   Keyboard.begin();
   
-  // Initialize sensors/pins
-  sensor1.set_CS_AutocaL_Millis(0xFFFFFFFF);
-  sensor2.set_CS_AutocaL_Millis(0xFFFFFFFF);
-  sensor3.set_CS_AutocaL_Millis(0xFFFFFFFF);
-  sensor4.set_CS_AutocaL_Millis(0xFFFFFFFF);
+  // Initialize sensors/pins without auto calibration
+  sensor1.set_CS_AutocaL_Millis( 0xFFFFFFFF );
+  sensor2.set_CS_AutocaL_Millis( 0xFFFFFFFF );
+  sensor3.set_CS_AutocaL_Millis( 0xFFFFFFFF );
+  sensor4.set_CS_AutocaL_Millis( 0xFFFFFFFF );
+
+  sensor1.set_CS_Timeout_Millis( 1000 );
+  sensor2.set_CS_Timeout_Millis( 1000 );
+  sensor3.set_CS_Timeout_Millis( 1000 );
+  sensor4.set_CS_Timeout_Millis( 1000 );
 }
 
 void loop() {
-  // Value for sensors
-  int value1 = sensor1.capacitiveSensor(50);
-  int value2 = sensor2.capacitiveSensor(50);
-  int value3 = sensor3.capacitiveSensor(50);
-  int value4 = sensor4.capacitiveSensor(50);
+  // Read value from sensors
+  int value1 = sensor1.capacitiveSensor( 50 );
+  int value2 = sensor2.capacitiveSensor( 50 );
+  int value3 = sensor3.capacitiveSensor( 50 );
+  int value4 = sensor4.capacitiveSensor( 50 );
 
-  boolean sensor1Active = value1 > tValue;
-  sensor1Action( sensor1Active );
-  
-  boolean sensor2Active = value2 > tValue;
-  sensor2Action( sensor2Active );
-  
-  boolean sensor3Active = value3 > tValue;
-  sensor3Action( sensor3Active );
-  
-  boolean sensor4Active = value4 > tValue;
-  sensor4Action( sensor4Active );
+  sensor1Action( value1 );
+  sensor2Action( value2 );
+  sensor3Action( value3 );
+  sensor4Action( value4 );
 
-  Serial.print( "tValue " );
-  Serial.println( tValue );
+  Serial.print( "ACTIVATION_THRESHOLD " );
+  Serial.println( ACTIVATION_THRESHOLD );
+  Serial.print( "RELEASE_THRESHOLD " );
+  Serial.println( RELEASE_THRESHOLD );
   Serial.print( "sensor1 " );
   Serial.println( value1 );
   Serial.print( "sensor2 " );
@@ -53,36 +59,67 @@ void loop() {
   Serial.print( "sensor4 " );
   Serial.println( value4 );
   
-  delay(10);   
+  delay(5);   
 }
 
-void sensor1Action( boolean active ) {
-  if( active ) {
-    Mouse.press();
-  } else {
+
+void sensor1Action( int value ) {
+
+  if( value > ACTIVATION_THRESHOLD ) {
+    if( sensor1Active == false ) {
+      sensor1Active = true;
+      Mouse.press();
+    }
+  }
+
+  if( value < RELEASE_THRESHOLD ) {
+    sensor1Active = false;
     Mouse.release();
   }
+
 }
 
-void sensor2Action( boolean active ) {
-  if( active ) {
-    Keyboard.press( ' ' );
-  } else {
+void sensor2Action( int value ) {
+  if( value > ACTIVATION_THRESHOLD ) {
+    if( sensor2Active == false ) {
+      sensor2Active = true;
+      Keyboard.press( ' ' );
+    }
+  }
+
+  if( value < RELEASE_THRESHOLD ) {
+    sensor2Active = false;
     Keyboard.release( ' ' );
   }
-}
-void sensor3Action( boolean active ) {
-  if( active ) {
-    Keyboard.press( KEY_RIGHT_ARROW );
-  } else {
-    Keyboard.release( KEY_RIGHT_ARROW );
-  }
-}
-void sensor4Action( boolean active ) {
-  if( active ) {
-    Keyboard.press( KEY_LEFT_ARROW );
-  } else {
-    Keyboard.release( KEY_LEFT_ARROW );
-  }
+  
 }
 
+void sensor3Action( int value ) {
+  if( value > ACTIVATION_THRESHOLD ) {
+    if( sensor3Active == false ) {
+      sensor3Active = true;
+      Keyboard.press( KEY_RIGHT_ARROW );
+    }
+  }
+
+  if( value < RELEASE_THRESHOLD ) {
+    sensor3Active = false;
+    Keyboard.release( KEY_RIGHT_ARROW );
+  }
+  
+}
+
+void sensor4Action( int value ) {
+  if( value > ACTIVATION_THRESHOLD ) {
+    if( sensor4Active == false ) {
+      sensor4Active = true;
+      Keyboard.press( KEY_LEFT_ARROW );
+    }
+  }
+
+  if( value < RELEASE_THRESHOLD ) {
+    sensor4Active = false;
+    Keyboard.release( KEY_LEFT_ARROW );
+  }
+  
+}
