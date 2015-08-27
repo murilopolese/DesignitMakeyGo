@@ -16,7 +16,7 @@ boolean sensor4Active = false;
                               
 // Potentiometer - Threshold
 int ACTIVATION_THRESHOLD = 8000;
-int RELEASE_THRESHOLD = 1000;
+int RELEASE_THRESHOLD = 8000;
 
 void setup() {      
   Serial.begin( 9600 );
@@ -54,7 +54,7 @@ void loop() {
   Serial.println( value1 );
   Serial.print( "sensor2 " );
   Serial.println( value2 );
-  Serial.print( "sensor3 " );
+  Serial.print( "sensor3 " );  
   Serial.println( value3 );
   Serial.print( "sensor4 " );
   Serial.println( value4 );
@@ -103,8 +103,10 @@ void sensor3Action( int value ) {
   }
 
   if( value < RELEASE_THRESHOLD ) {
-    sensor3Active = false;
-    Keyboard.release( KEY_RIGHT_ARROW );
+    if( sensor3Active == true ) {
+      Keyboard.release( KEY_RIGHT_ARROW );
+      sensor3Active = false;
+    }
   }
   
 }
