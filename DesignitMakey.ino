@@ -14,20 +14,23 @@ boolean sensor2Active = false;
 boolean sensor3Active = false;
 boolean sensor4Active = false;
                               
-// Potentiometer - Threshold
-int ACTIVATION_THRESHOLD = 8000;
-int RELEASE_THRESHOLD = 8000;
+// Global Threshold
+// Use 8000 if you are using 5M ohms resistance
+int ACTIVATION_THRESHOLD = 1000;
+int RELEASE_THRESHOLD = 1000;  
 
-void setup() {      
+void setup() {
   Serial.begin( 9600 );
   Keyboard.begin();
   
-  // Initialize sensors/pins without auto calibration
-  sensor1.set_CS_AutocaL_Millis( 0xFFFFFFFF );
-  sensor2.set_CS_AutocaL_Millis( 0xFFFFFFFF );
-  sensor3.set_CS_AutocaL_Millis( 0xFFFFFFFF );
-  sensor4.set_CS_AutocaL_Millis( 0xFFFFFFFF );
+  // Initialize sensors/pins auto calibration 
+  // To set autocalibration off use the value: 0xFFFFFFFF
+  sensor1.set_CS_AutocaL_Millis( 5000 );
+  sensor2.set_CS_AutocaL_Millis( 5000 );
+  sensor3.set_CS_AutocaL_Millis( 5000 );
+  sensor4.set_CS_AutocaL_Millis( 5000 );
 
+  // If the sensors do not answer in 1 second, timeout them
   sensor1.set_CS_Timeout_Millis( 1000 );
   sensor2.set_CS_Timeout_Millis( 1000 );
   sensor3.set_CS_Timeout_Millis( 1000 );
@@ -36,10 +39,10 @@ void setup() {
 
 void loop() {
   // Read value from sensors
-  int value1 = sensor1.capacitiveSensor( 50 );
-  int value2 = sensor2.capacitiveSensor( 50 );
-  int value3 = sensor3.capacitiveSensor( 50 );
-  int value4 = sensor4.capacitiveSensor( 50 );
+  int value1 = sensor1.capacitiveSensor( 20 );
+  int value2 = sensor2.capacitiveSensor( 20 );
+  int value3 = sensor3.capacitiveSensor( 20 );
+  int value4 = sensor4.capacitiveSensor( 20 );
 
   sensor1Action( value1 );
   sensor2Action( value2 );
@@ -59,7 +62,7 @@ void loop() {
   Serial.print( "sensor4 " );
   Serial.println( value4 );
   
-  delay(5);   
+  delay(10);   
 }
 
 
