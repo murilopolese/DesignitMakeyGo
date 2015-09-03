@@ -3,7 +3,7 @@
 
 This project was initially designed for Designit's prototyping workshops at [Designit Lab](http://designitstockholmlab.tumblr.com/).
 
-The circuit and firmware inspired on [Makey Makey Go](http://designitstockholmlab.tumblr.com/) and developed on top of Arduino micro using the [Capacitive Sensor Library]().
+The circuit and firmware inspired on [Makey Makey Go](http://designitstockholmlab.tumblr.com/) and developed on top of Arduino micro using the [Capacitive Sensor Library](http://playground.arduino.cc/Main/CapacitiveSensor?from=Main.CapSense).
 
 The shcematics, look more or less like this, except by the inductors (coils) are just jumpers and the pin numbers are not exactly the same:
 
