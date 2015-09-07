@@ -8,7 +8,7 @@ bool spaceOn = false;
 bool rightOn = false;
 bool leftOn = false;
 
-int threshold = 1;
+int threshold = 2;
 
 void setup() {
   Serial.begin( 9600 );
